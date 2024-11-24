@@ -18,7 +18,7 @@ class RecipeBox extends Component {
   }
 
   fetchRecipes = () => {
-    fetch(`http://localhost:3002/recipes/${this.props.user.id}`)
+    fetch(`https://recipe-app-backend-mongodb.onrender.com/recipes/${this.props.user.id}`)
       .then((response) => response.json())
       .then((recipes) => this.setState({ recipes }))
       .catch((err) => console.error('Error fetching recipes:', err));
@@ -35,7 +35,7 @@ class RecipeBox extends Component {
     const ingredientsArray = ingredients.split(',').map((ingredient) => ingredient.trim());
 
     if (editingRecipeId) {
-      fetch(`http://localhost:3002/recipes/${editingRecipeId}`, {
+      fetch(`https://recipe-app-backend-mongodb.onrender.com/recipes/${editingRecipeId}`, {
         method: 'put',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -52,7 +52,7 @@ class RecipeBox extends Component {
         })
         .catch((err) => console.error('Error updating recipe:', err));
     } else {
-      fetch('http://localhost:3002/recipes', {
+      fetch('https://recipe-app-backend-mongodb.onrender.com/recipes', {
         method: 'post',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -72,7 +72,7 @@ class RecipeBox extends Component {
   };
 
   onDeleteRecipe = (recipeId) => {
-    fetch(`http://localhost:3002/recipes/${recipeId}`, { method: 'delete' })
+    fetch(`https://recipe-app-backend-mongodb.onrender.com/recipes/${recipeId}`, { method: 'delete' })
       .then(() => this.fetchRecipes())
       .catch((err) => console.error('Error deleting recipe:', err));
   };
