@@ -23,7 +23,7 @@ class Register extends React.Component {
   };
 
   onSubmitSignIn = () => {
-    fetch('http://localhost:3002/register', {
+    fetch('https://recipe-app-backend-mongodb.onrender.com/register', {
         method: 'post',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
