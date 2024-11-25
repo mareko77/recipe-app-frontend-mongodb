@@ -1,0 +1,23 @@
+body {
+  font-family: 'Oxygen', sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #f9fbff;
+}
+
+button {
+  font-family: inherit;
+  border-radius: 0.3rem;
+}
+
+.modal-content {
+  border-radius: 0.3rem;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+/* Specificity improvements */
+.recipe-wrapper {
+  display: flex;
+  justify-content: center;
+  padding: 2rem;
+}
