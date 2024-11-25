@@ -126,7 +126,7 @@ class RecipeBox extends Component {
 
         <div className="flex flex-wrap justify-center gap3">
           {recipes.map((recipe) => (
-            <div key={recipe.id} className="recipe-item flex flex-column items-center mb4 pa3 ba b--black-20">
+            <div key={recipe._id} className="recipe-item flex flex-column items-center mb4 pa3 ba b--black-20">
               <h2 className="f4">{recipe.name}</h2>
               <p>{recipe.description}</p>
               <p>
@@ -139,7 +139,7 @@ class RecipeBox extends Component {
               />
               <div className="recipe-buttons mt2 flex justify-center gap2">
                 <button
-                  onClick={() => this.onDeleteRecipe(recipe.id)}
+                  onClick={() => this.onDeleteRecipe(recipe._id)}
                   className="pa2 ba bw1 bg-light-red mt2 f6 link white bg-red ba b--red br2 hover-bg-light-red"
                 >
                   Delete
