@@ -8,6 +8,7 @@ class RecipeBox extends Component {
       name: '',
       description: '',
       ingredients: '',
+      instructions: '', 
       url_photo: '',
       editingRecipeId: null,
     };
@@ -29,11 +30,10 @@ class RecipeBox extends Component {
   };
 
   onSubmitRecipe = () => {
-    const { name, description, ingredients, url_photo, editingRecipeId } = this.state;
+    const { name, description, ingredients, instructions, url_photo, editingRecipeId } = this.state;
     const { user } = this.props;
 
-    const ingredientsArray = ingredients.split(',').map((ingredient) => ingredient.trim());
-
+   
     if (editingRecipeId) {
       fetch(`https://recipe-app-backend-mongodb-9.onrender.com/recipes/${editingRecipeId}`, {
         method: 'put',
@@ -42,13 +42,14 @@ class RecipeBox extends Component {
           userId: user.id,
           name,
           description,
-          ingredients: ingredientsArray,
+          ingredients, /*: ingredientsArray,*/
+          instructions,
           url_photo,
         }),
       })
         .then(() => {
           this.fetchRecipes();
-          this.setState({ name: '', description: '', ingredients: '', url_photo: '', editingRecipeId: null });
+          this.setState({ name: '', description: '', ingredients: '', instructions: '', url_photo: '', editingRecipeId: null });
         })
         .catch((err) => console.error('Error updating recipe:', err));
     } else {
@@ -59,13 +60,14 @@ class RecipeBox extends Component {
           userId: user.id,
           name,
           description,
-          ingredients: ingredientsArray,
+          ingredients,
+          instructions,
           url_photo,
         }),
       })
         .then(() => {
           this.fetchRecipes();
-          this.setState({ name: '', description: '', ingredients: '', url_photo: '' });
+          this.setState({ name: '', description: '', ingredients: '', instructions: '', url_photo: '' });
         })
         .catch((err) => console.error('Error adding recipe:', err));
     }
@@ -79,76 +81,99 @@ class RecipeBox extends Component {
 
   onEditRecipe = (recipe) => {
     this.setState({
-      editingRecipeId: recipe._id, // Use _id for MongoDB
+      editingRecipeId: recipe._id, 
       name: recipe.name,
       description: recipe.description,
-      ingredients: recipe.ingredients.join(', '), // Convert array to comma-separated string
+      ingredients: recipe.ingredients,
+      instructions: recipe.instructions, 
       url_photo: recipe.url_photo,
     });
   };
 
-  render() {
-    const { recipes, name, description, ingredients, url_photo, editingRecipeId } = this.state;
+  render(){
+    const { recipes, name, description, ingredients, url_photo } = this.state;
 
     return (
       <div className="pa4">
-        <div className="mb3">
+        <h1 className="tc f3 fw6">Your Recipes</h1>
+        <div className="mb4 bg-sand pa3 br3 shadow-2">
+          <h2 className="f4">Add or Edit a Recipe</h2>
           <input
             type="text"
             placeholder="Recipe Name"
-            className="pa2 input-reset ba bg-transparent w-100 mb2"
+            className="pa2 input-reset ba b--black-20 br3 w-100 mb3"
             value={name}
             onChange={(e) => this.onInputChange('name', e.target.value)}
           />
           <textarea
             placeholder="Description"
-            className="pa2 input-reset ba bg-transparent w-100 mb2"
+            className="pa2 input-reset ba b--black-20 br3 w-100 mb3"
             value={description}
             onChange={(e) => this.onInputChange('description', e.target.value)}
           />
           <textarea
             placeholder="Ingredients (comma-separated)"
-            className="pa2 input-reset ba bg-transparent w-100 mb2"
+            className="pa2 input-reset ba b--black-20 br3 w-100 mb3"
             value={ingredients}
             onChange={(e) => this.onInputChange('ingredients', e.target.value)}
           />
+          <textarea
+            placeholder="Instructions"
+            className="pa2 input-reset ba b--black-20 br3 w-100 mb3"
+            value={this.state.instructions}
+            onChange={(e) => this.onInputChange('instructions', e.target.value)}
+          />
+
           <input
             type="text"
             placeholder="Photo URL"
-            className="pa2 input-reset ba bg-transparent w-100 mb2"
+            className="pa2 input-reset ba b--black-20 br3 w-100 mb3"
             value={url_photo}
             onChange={(e) => this.onInputChange('url_photo', e.target.value)}
           />
-          <button onClick={this.onSubmitRecipe} className="pa2 ba bw1 bg-light-green">
-            {editingRecipeId ? 'Update Recipe' : 'Add Recipe'}
+          <button
+            onClick={this.onSubmitRecipe}
+            className="pa2 ba bw1 b--black-20 bg-blue br3 grow pointer"
+          >
+            {this.state.editingRecipeId ? 'Update Recipe' : 'Add Recipe'}
           </button>
         </div>
 
-        <div className="flex flex-wrap justify-center gap3">
+        <div className="flex flex-wrap justify-center">
           {recipes.map((recipe) => (
-            <div key={recipe._id} className="recipe-item flex flex-column items-center mb4 pa3 ba b--black-20">
-              <h2 className="f4">{recipe.name}</h2>
-              <p>{recipe.description}</p>
-              <p>
-                <strong>Ingredients:</strong> {recipe.ingredients.join(', ')}
-              </p>
-              <img 
-                src={recipe.url_photo} 
-                alt={recipe.name} 
-                className="w-100 h-auto mw5 mh3" 
-              />
-              <div className="recipe-buttons mt2 flex justify-center gap2">
-                <button
-                  onClick={() => this.onDeleteRecipe(recipe._id)}
-                  className="pa2 ba bw1 bg-light-red mt2 f6 link white bg-red ba b--red br2 hover-bg-light-red"
-                >
-                  Delete
-                </button>
+            <div
+              key={recipe.id}
+              className="bg-white ba b--black-20 pa3 ma2 br3 shadow-1 w-100 w-50-m w-25-l flex flex-column justify-between"
+            >
+              <div>
+                <h2 className="f5 fw6 mb2">{recipe.name}</h2>
+                <p className="f6 mb2">{recipe.description}</p>
+                <p className="f6 mb2">
+                  <strong>Ingredients:</strong> {recipe.ingredients}
+                </p>
+                <p className="f6 mb2">
+                  <strong>Instructions:</strong> {recipe.instructions}
+                </p>
+                {recipe.url_photo && (
+                  <img
+                    src={recipe.url_photo}
+                    alt={recipe.name}
+                    className="w-100 h-auto br3 mb2"
+                  />
+                )}
+              </div>
+              <div className="flex justify-between mt3">
                 <button
                   onClick={() => this.onEditRecipe(recipe)}
-                  className="pa2 ba bw1 bg-light-yellow mt2 f6 link black bg-yellow ba b--yellow br2 hover-bg-light-yellow"
+                  className="pa1 ba bw1 b--blue bg-light-blue br3 pointer grow"
                 >
                   Edit
+                </button>
+                <button
+                  onClick={() => this.onDeleteRecipe(recipe.id)}
+                  className="pa1 ba bw1 b--red bg-light-red br3 pointer grow"
+                >
+                  Delete
                 </button>
               </div>
             </div>
