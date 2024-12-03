@@ -8,7 +8,6 @@ class RecipeBox extends Component {
       name: '',
       description: '',
       ingredients: '',
-      instructions: '', 
       url_photo: '',
       editingRecipeId: null,
     };
@@ -30,7 +29,7 @@ class RecipeBox extends Component {
   };
 
   onSubmitRecipe = () => {
-    const { name, description, ingredients, instructions, url_photo, editingRecipeId } = this.state;
+    const { name, description, ingredients,  url_photo, editingRecipeId } = this.state;
     const { user } = this.props;
 
    
@@ -43,13 +42,12 @@ class RecipeBox extends Component {
           name,
           description,
           ingredients, /*: ingredientsArray,*/
-          instructions,
           url_photo,
         }),
       })
         .then(() => {
           this.fetchRecipes();
-          this.setState({ name: '', description: '', ingredients: '', instructions: '', url_photo: '', editingRecipeId: null });
+          this.setState({ name: '', description: '', ingredients: '',  url_photo: '', editingRecipeId: null });
         })
         .catch((err) => console.error('Error updating recipe:', err));
     } else {
@@ -61,13 +59,12 @@ class RecipeBox extends Component {
           name,
           description,
           ingredients,
-          instructions,
           url_photo,
         }),
       })
         .then(() => {
           this.fetchRecipes();
-          this.setState({ name: '', description: '', ingredients: '', instructions: '', url_photo: '' });
+          this.setState({ name: '', description: '', ingredients: '', url_photo: '' });
         })
         .catch((err) => console.error('Error adding recipe:', err));
     }
@@ -85,13 +82,12 @@ class RecipeBox extends Component {
       name: recipe.name,
       description: recipe.description,
       ingredients: recipe.ingredients,
-      instructions: recipe.instructions, 
       url_photo: recipe.url_photo,
     });
   };
 
   render(){
-    const { recipes, name, description, ingredients, url_photo } = this.state;
+    const { recipes, name, description, ingredients,  url_photo } = this.state;
 
     return (
       <div className="pa4">
@@ -106,7 +102,7 @@ class RecipeBox extends Component {
             onChange={(e) => this.onInputChange('name', e.target.value)}
           />
           <textarea
-            placeholder="Description"
+            placeholder="Instructions"
             className="pa2 input-reset ba b--black-20 br3 w-100 mb3"
             value={description}
             onChange={(e) => this.onInputChange('description', e.target.value)}
@@ -117,12 +113,7 @@ class RecipeBox extends Component {
             value={ingredients}
             onChange={(e) => this.onInputChange('ingredients', e.target.value)}
           />
-          <textarea
-            placeholder="Instructions"
-            className="pa2 input-reset ba b--black-20 br3 w-100 mb3"
-            value={this.state.instructions}
-            onChange={(e) => this.onInputChange('instructions', e.target.value)}
-          />
+
 
           <input
             type="text"
@@ -147,12 +138,11 @@ class RecipeBox extends Component {
             >
               <div>
                 <h2 className="f5 fw6 mb2">{recipe.name}</h2>
-                <p className="f6 mb2">{recipe.description}</p>
                 <p className="f6 mb2">
-                  <strong>Ingredients:</strong> {recipe.ingredients}
+                  <strong>Instruction:</strong> {recipe.description}
                 </p>
                 <p className="f6 mb2">
-                  <strong>Instructions:</strong> {recipe.instructions}
+                  <strong>Ingredients:</strong> {recipe.ingredients}
                 </p>
                 {recipe.url_photo && (
                   <img
@@ -169,9 +159,10 @@ class RecipeBox extends Component {
                 >
                   Edit
                 </button>
-                 <button
+                <button
                     onClick={() => this.onDeleteRecipe(recipe._id)}
-                    className="pa1 ba bw1 b--red bg-light-red br3 pointer grow">
+                    className="pa1 ba bw1 b--red bg-light-red br3 pointer grow"
+                >
                     Delete
                 </button>
               </div>
