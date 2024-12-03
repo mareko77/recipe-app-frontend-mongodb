@@ -169,11 +169,10 @@ class RecipeBox extends Component {
                 >
                   Edit
                 </button>
-                <button
-                  onClick={() => this.onDeleteRecipe(recipe.id)}
-                  className="pa1 ba bw1 b--red bg-light-red br3 pointer grow"
-                >
-                  Delete
+                 <button
+                    onClick={() => this.onDeleteRecipe(recipe._id)}
+                    className="pa1 ba bw1 b--red bg-light-red br3 pointer grow">
+                    Delete
                 </button>
               </div>
             </div>
